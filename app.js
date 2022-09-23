@@ -6,11 +6,14 @@ const port = process.env.PORT;
 
 app.use(express.json());
 
+const connect = require('./config/database');
+connect();
+
 const cors = require('cors');
 app.use(cors());
 
-const connect = require('./config/database');
-connect();
+const { swaggerUi, specs } = require("./config/swagger");
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }));
 
 const routes = require('./config/routes');
 app.use([routes]);
